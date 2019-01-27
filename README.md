@@ -119,6 +119,8 @@ swap and installs kubeadm, so run the file
 ./setup/scripts/installs.sh
 ```
 
+Reboot the device after completion
+
 ## Kubernetes setup
 
 *kubeadm* should be used to setup the kubernetes master and worker nodes, in the
