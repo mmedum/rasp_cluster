@@ -52,6 +52,14 @@ passwd
 
 Below steps should be done for all the nodes in the cluster
 
+### Update
+
+```bash
+sudo apt-get update && sudo apt-get upgrade -y
+```
+
+Reboot device after update
+
 ### Hostname
 
 Update hostname by using the *raspi-config*
@@ -109,13 +117,6 @@ swap and installs kubeadm, so run the file
 
 ```bash
 ./setup/scripts/installs.sh
-```
-
-Reboot the device and run the file one more time incase of complaints from the
-device. The last step before setting the the node is to update it
-
-```bash
-sudo apt-get update && sudo apt-get upgrade
 ```
 
 ## Kubernetes setup
