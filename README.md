@@ -91,25 +91,13 @@ sudo update-locale en_US.UTF-8
 
 ### Network setup
 
-For making it easier for k8s workers to connect to the k8s master, is makes
-sense to set a hostname and static ip for all the Raspberry Pi devices.
+Use *raspi-config* to set the hostname and reboot, for setting the ip, use
+either dhcpcd or set a fixed ip through your network.
+
+It should now be possible to ssh by doing
 
 ```bash
-cd setup/scripts/
-```
-
-In the scripts folder is the sh file *set_hostname_and_static_ip.sh*, run it by
-providing the hostname, wanted static ip of the device and ip of the router
-
-```bash
-./set_hostname_and_static_ip.sh k8s-master-dc1 192.168.1.100 192.168.1.1
-```
-
-Reboot the Raspberry Pi and it should be possible to ssh into the Raspberry Pi
-by doing
-
-```bash
-ssh pi@k8s-master-dc1.local
+ssh pi@pi-hostname.local
 ```
 
 Which verifies that hostname and static ip has been set
