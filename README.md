@@ -52,6 +52,14 @@ passwd
 
 Below steps should be done for all the nodes in the cluster
 
+### Hostname
+
+Update hostname by using the *raspi-config*
+
+```bash
+sudo raspi-config
+```
+
 ### Setup files
 
 Copy the folder setup to the Raspberry Pi by running
@@ -63,13 +71,7 @@ scp -r setup pi@ip-for-raspberry:/home/pi/
 ### Locale setup
 
 Then setup correct locale by editing /etc/locale.gen and uncomment
-*en_US.UTF-8*, then run
-
-```bash
-sudo locale-gen en_US.UTF-8
-```
-
-Update /etc/default/locale with
+*en_US.UTF-8*. Update */etc/default/locale* with
 
 ```bash
 LANG=en_US.UTF-8
@@ -78,6 +80,10 @@ LANGUAGE=en_US.UTF-8
 ```
 
 And then run
+
+```bash
+sudo locale-gen en_US.UTF-8
+```
 
 ```bash
 sudo update-locale en_US.UTF-8
@@ -118,7 +124,11 @@ swap and installs kubeadm, so run the file
 ```
 
 Reboot the device and run the file one more time incase of complaints from the
-device.
+device. The last step before setting the the node is to update it
+
+```bash
+sudo apt-get update && sudo apt-get upgrade
+```
 
 ## Kubernetes setup
 
@@ -133,7 +143,7 @@ and updated for the newer kubeadm.
 On the master node run
 
 ```bash
-sudo kubeadm init --config /setup/kubernetes_config/kubeadm_conf.yaml
+sudo kubeadm init --config setup/kubernetes_config/kubeadm_conf.yaml
 ```
 It will take a couple of minutes to let kubeadm spin up the master node, when
 finished kubeadm asks for some things to be executed
@@ -146,3 +156,27 @@ sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
 And also prints the line which should be uses for the workers to join the
 network
+
+```bash
+sudo kubeadm join --token TOKEN 192.168.1.100:6443 --discovery-token-ca-cert-hash HASH
+```
+
+Check whether the node is up by running
+
+```bash
+kubectl get nodes
+```
+
+### Worker node
+
+After the full setup run
+
+```bash
+sudo kubeadm join --token TOKEN 192.168.1.100:6443 --discovery-token-ca-cert-hash HASH
+```
+
+Then check that the node has joined the network
+
+```bash
+kubectl get nodes
+```
