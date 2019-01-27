@@ -133,17 +133,16 @@ sudo apt-get update && sudo apt-get upgrade
 ## Kubernetes setup
 
 *kubeadm* should be used to setup the kubernetes master and worker nodes, in the
-*/setup/kubernetes_config/* folder is the file *kubeadm_config.yaml*, that
-defines some parameters for the cluster, this params is borrowed from
-[kubecloud](https://kubecloud.io/setting-up-a-kubernetes-1-11-raspberry-pi-cluster-using-kubeadm-952bbda329c8)
-and updated for the newer kubeadm.
+*/setup/kubernetes_config/* folder is the python file *init.py*, which wraps the
+*kubeadm init* command, with tracking of the manifest file, so that the init
+will not end up timing out and not enable the cluster.
 
 ### Master node
 
 On the master node run
 
 ```bash
-sudo kubeadm init --config setup/kubernetes_config/kubeadm_conf.yaml
+python3 init.py
 ```
 It will take a couple of minutes to let kubeadm spin up the master node, when
 finished kubeadm asks for some things to be executed
