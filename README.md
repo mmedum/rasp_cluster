@@ -170,3 +170,33 @@ Then check that the node has joined the network
 ```bash
 kubectl get nodes
 ```
+
+### Network
+
+Flannel or Weave net is the two choices for setting up networking, this guide
+uses Weave net, so on the master node run
+
+```bash
+kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')"
+```
+
+This will setup weave net on the nodes, verify by running
+
+```bash
+kubectl get nodes
+```
+
+### Kubectl setup
+
+With the cluster running, we need to hook our local machine up to the cluster,
+first download the config from the master node to the local machine
+
+```bash
+$ scp pi@ip-master-node:/home/pi/.kube/config ./config
+```
+
+Copy the config file to the .kube folder on the local machine
+
+```bash
+cp config ~/.kube/config
+```  
