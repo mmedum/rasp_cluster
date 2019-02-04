@@ -186,7 +186,7 @@ This will setup weave net on the nodes, verify by running
 kubectl get nodes
 ```
 
-### Kubectl setup
+### Local kubectl setup
 
 With the cluster running, we need to hook our local machine up to the cluster,
 first download the config from the master node to the local machine
@@ -200,3 +200,45 @@ Copy the config file to the .kube folder on the local machine
 ```bash
 cp config ~/.kube/config
 ```  
+
+### Kubernetes dashboard setup
+
+After local setup of kubectl
+
+```bash
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/master/aio/deploy/recommended/kubernetes-dashboard-arm-head.yaml
+```
+
+This will provision a dashboard to the cluster, for securing access locally
+
+```bash
+kubectl create serviceaccount dashboard -n default
+```
+
+Then run
+
+```bash
+kubectl create clusterrolebinding dashboard-admin -n default --clusterrole=cluster-admin --serviceaccount=default:dashboard
+```
+
+Now the token is needed when accessing the dashboard
+
+```bash
+kubectl get secret $(kubectl get serviceaccount dashboard -o jsonpath="{.secrets[0].name}") -o jsonpath="{.data.token}" | base64 --decode
+```
+
+This will output the token, which is use as the token input when accessing the
+dashboard, first run
+
+```dash
+kubectl proxy
+```
+
+By doing that it should be possible to access the dashboard through the url
+
+```bash
+http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard-head:/proxy
+```
+
+The former described token should then be uses for login.
+
